@@ -1,5 +1,7 @@
 package gti310.tp4;
 
+import yCbCr.YCbCrEncoder;
+
 /**
  * The Main class is where the different functions are called to either encode
  * a PPM file to the Squeeze-Light format or to decode a Squeeze-Ligth image
@@ -41,5 +43,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
+		
+		YCbCrEncoder yCbCrEncoder = new YCbCrEncoder();
+		yCbCrEncoder.getRGB();
 	}
 }
