@@ -29,8 +29,8 @@ public class YCbCrReaderWriter {
 	private static final double B_CR_FACTOR = 0;
 	
 	
-	private static final short Y_ADJ = 16;
-	private static final short CR_ADJ = 128;
+	private static final double Y_ADJ = 16;
+	private static final double CR_ADJ = 128;
 	private static final double CB_ADJ = 128;
 	
 	private double _bpc = 256; // bits per color
@@ -99,7 +99,7 @@ public class YCbCrReaderWriter {
 					
 					// perte d'information comparativement au RGB d'origine
 					// normal ? à cause des arrondissements
-					// pour le moment, on garde les informations en double et on fait
+					// pour le moment, on garde les informations en type Double (au lieu de int) et on fait
 					// un math.ceil pour garder le plus d'information possible
 					System.out.println(rgbImage[0][i][j]);
 				}
