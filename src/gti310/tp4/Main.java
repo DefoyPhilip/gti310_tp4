@@ -1,6 +1,6 @@
 package gti310.tp4;
 
-import yCbCr.YCbCrEncoder;
+import yCbCr.YCbCrReaderWriter;
 
 /**
  * The Main class is where the different functions are called to either encode
@@ -44,7 +44,7 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
 		
-		YCbCrEncoder yCbCrEncoder = new YCbCrEncoder();
+		YCbCrReaderWriter yCbCrEncoder = new YCbCrReaderWriter();
 		yCbCrEncoder.getRGB();
 	}
 }
