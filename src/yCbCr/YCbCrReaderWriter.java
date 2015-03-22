@@ -129,11 +129,11 @@ public class YCbCrReaderWriter {
 	}
 	
 	private double YCbCrToG(int row, int col, double[] yCbCrArray){
-		return (double) (G_Y_FACTOR * (yCbCrArray[0] - Y_ADJ) + G_CB_FACTOR * (yCbCrArray[1] - CB_ADJ) + G_CR_FACTOR * (yCbCrArray[2] - CR_ADJ));
+		return (double) (Math.ceil(G_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(G_CB_FACTOR * (yCbCrArray[1] - CB_ADJ)) + Math.ceil(G_CR_FACTOR * (yCbCrArray[2] - CR_ADJ)));
 	}
 	
 	private double YCbCrToB(int row, int col, double[] yCbCrArray){
-		return (double) (B_Y_FACTOR * (yCbCrArray[0] - Y_ADJ) + B_CB_FACTOR * (yCbCrArray[1] - CB_ADJ));
+		return (double) (Math.ceil(B_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(B_CB_FACTOR * (yCbCrArray[1] - CB_ADJ)));
 	}
 
 
