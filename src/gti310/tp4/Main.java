@@ -1,6 +1,5 @@
 package gti310.tp4;
-
-import gti310.tp4.dct.DCTEncoder;
+import gti310.tp4.dct.DCTUtils;
 
 /**
  * The Main class is where the different functions are called to either encode
@@ -43,6 +42,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
-		new DCTEncoder();
+		DCTUtils.testEncode(true);
+		DCTUtils.testDecode(true);
 	}
 }
