@@ -1,4 +1,5 @@
 package gti310.tp4;
+import gti310.tp4.dct.DCTUtils;
 
 import yCbCr.YCbCrImageModel;
 import yCbCr.YCbCrReaderWriter;
@@ -44,11 +45,16 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
+
 		
 		YCbCrReaderWriter yCbCrCodec = new YCbCrReaderWriter();
 		int[][][] RGBImage = PPMReaderWriter.readPPMFile("medias/lena.ppm"); // testing
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
 		
 		yCbCrCodec.readYCbCr(yCbCrImage);
+
+		DCTUtils.testEncode(true);
+		DCTUtils.testDecode(true);
+
 	}
 }
