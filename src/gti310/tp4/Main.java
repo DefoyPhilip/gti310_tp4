@@ -1,8 +1,8 @@
 package gti310.tp4;
 import gti310.tp4.dct.DCTUtils;
-
 import yCbCr.YCbCrImageModel;
 import yCbCr.YCbCrReaderWriter;
+import zigzag.ZigzagReaderWriter;
 
 /**
  * The Main class is where the different functions are called to either encode
@@ -46,15 +46,19 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
 
-		
+		/* YCBCR*/
 		YCbCrReaderWriter yCbCrCodec = new YCbCrReaderWriter();
 		int[][][] RGBImage = PPMReaderWriter.readPPMFile("medias/lena.ppm"); // testing
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
-		
 		yCbCrCodec.readYCbCr(yCbCrImage);
-
+		
+		/* DCT */
 		DCTUtils.testEncode(true);
 		DCTUtils.testDecode(true);
+		
+		/* ZIGZAG */
+		ZigzagReaderWriter zigzag = new ZigzagReaderWriter();
+		zigzag.print(zigzag.write(zigzag._testQuantified));
 
 	}
 }

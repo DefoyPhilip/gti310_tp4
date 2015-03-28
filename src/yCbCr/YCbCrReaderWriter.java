@@ -101,7 +101,7 @@ public class YCbCrReaderWriter {
 					// normal ? à cause des arrondissements
 					// pour le moment, on garde les informations en type Double (au lieu de int) et on fait
 					// un math.ceil pour garder le plus d'information possible
-					System.out.println(rgbImage[0][i][j]);
+					// System.out.println(rgbImage[0][i][j]);
 				}
 				
 			}
