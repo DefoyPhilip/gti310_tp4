@@ -68,6 +68,7 @@ public class ZigzagReaderWriter {
 		
 		/*
 		 * While the last row hasn't been fully visited
+		 * starting from the first row
 		 */
 		while (nbVisitedElements[width - 1] < width) {
 			int edge = whichEdge(currentRow, currentCol, height, width);
@@ -133,8 +134,85 @@ public class ZigzagReaderWriter {
 	}
 
 
-	public void read(List<Integer> zigzagVector) {
+	public int[][] read(List<Integer> zigzagVector) {
+		int size = (int) Math.sqrt(zigzagVector.size());
+		int[][] quantifiedOutput = new int[size][size];
 		
+		int[] nbInsertedElements = new int[size];
+		
+		int currentRow = size-1;
+		int currentCol = size-1;
+		
+		int direction = UP;
+		
+		
+		/*
+		 * While the first row hasn't been fully visited
+		 * starting from the last row
+		 */
+		while (nbInsertedElements[0] < size) {
+			int edge = whichEdge(currentRow, currentCol, size, size);
+			//System.out.println("[" + currentRow + "][" + currentCol + "]" + " => " + edge);
+			
+			switch (edge) {
+				case BOTTOM_EDGE :
+					quantifiedOutput[size-1][currentCol] = zigzagVector.remove(zigzagVector.size()-1);
+					quantifiedOutput[size-1][currentCol-1] = zigzagVector.remove(zigzagVector.size()-1);
+					nbInsertedElements[currentRow] +=2;
+					direction = UP;
+					currentRow--;
+					break;
+				
+				case TOP_EDGE : 
+					quantifiedOutput[0][currentCol] = zigzagVector.remove(zigzagVector.size()-1);
+					quantifiedOutput[0][currentCol-1] = zigzagVector.remove(zigzagVector.size()-1);
+					nbInsertedElements[0] +=2;
+					direction = DOWN;
+					currentRow++;
+					currentCol -=2;
+					break;
+				
+				case LEFT_EDGE :
+					quantifiedOutput[currentRow][0] = zigzagVector.remove(zigzagVector.size()-1);
+					quantifiedOutput[currentRow-1][0] = zigzagVector.remove(zigzagVector.size()-1);
+					nbInsertedElements[currentRow] ++;
+					nbInsertedElements[currentRow-1] ++;
+					direction = UP;
+					currentRow-=2;
+					currentCol++;
+					break;
+					
+				case RIGHT_EDGE : 
+					quantifiedOutput[currentRow][currentCol] = zigzagVector.remove(zigzagVector.size()-1);
+					quantifiedOutput[currentRow-1][currentCol] = zigzagVector.remove(zigzagVector.size()-1);
+					nbInsertedElements[currentRow] ++;
+					nbInsertedElements[currentRow-1] ++;
+					direction = DOWN;
+					currentCol--;
+					break;
+					
+				case NO_EDGE : 
+					quantifiedOutput[currentRow][currentCol] = zigzagVector.remove(zigzagVector.size()-1);
+					nbInsertedElements[currentRow] ++;
+					
+					if (direction == DOWN){
+						currentRow++;
+						currentCol--;
+					}
+					else{
+						currentRow--;
+						currentCol++;
+					}
+					
+					break;
+					
+				default :
+					break;
+			}
+			
+		}
+
+		return quantifiedOutput;
 	}
 	
 	private int whichEdge(int row, int col, int height, int width){
@@ -152,7 +230,8 @@ public class ZigzagReaderWriter {
 	
 	
 	public void print(List<Integer> zigzagVector){
-
+		
+		System.out.println("/////// zigzag write //////");
 		int c = 0;
 		for (Iterator iterator = zigzagVector.iterator(); iterator.hasNext();) {
 			Integer integer = (Integer) iterator.next();
@@ -166,5 +245,23 @@ public class ZigzagReaderWriter {
 
 			c++;
 		}
+		
+		System.out.println("");
 	}
+	
+	public void print(int[][] quantified){
+		System.out.println("");
+		System.out.println("/////// zigzag read //////");
+		for (int i = 0; i < quantified.length; i++) {
+			for (int j = 0; j < quantified[i].length; j++) {
+				System.out.print(quantified[i][j] + ",");
+			}
+			System.out.println("");
+		}
+		
+		System.out.println("");
+
+	}
+	
+
 }

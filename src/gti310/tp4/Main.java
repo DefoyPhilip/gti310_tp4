@@ -59,6 +59,7 @@ public class Main {
 		/* ZIGZAG */
 		ZigzagReaderWriter zigzag = new ZigzagReaderWriter();
 		zigzag.print(zigzag.write(zigzag._testQuantified));
+		zigzag.print(zigzag.read(zigzag.write(zigzag._testQuantified)));
 
 	}
 }
