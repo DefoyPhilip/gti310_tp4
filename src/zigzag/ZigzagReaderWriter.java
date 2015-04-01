@@ -61,17 +61,16 @@ public class ZigzagReaderWriter {
 		
 		int direction = DOWN;
 		
-		int width = quantifiedInput.length;
-		int height = quantifiedInput.length;
+		int size = quantifiedInput.length;
 		
-		int[] nbVisitedElements = new int[width];
+		int[] nbVisitedElements = new int[size];
 		
 		/*
 		 * While the last row hasn't been fully visited
 		 * starting from the first row
 		 */
-		while (nbVisitedElements[width - 1] < width) {
-			int edge = whichEdge(currentRow, currentCol, height, width);
+		while (nbVisitedElements[size - 1] < size) {
+			int edge = whichEdge(currentRow, currentCol, size, size);
 			//System.out.println("[" + currentRow + "][" + currentCol + "]" + " => " + edge);
 			switch (edge) {
 				case TOP_EDGE :
@@ -83,10 +82,10 @@ public class ZigzagReaderWriter {
 					break;
 				
 				case BOTTOM_EDGE : 
-					zigzagVector.add(quantifiedInput[height-1][currentCol]);
-					zigzagVector.add(quantifiedInput[height-1][currentCol + 1]);
+					zigzagVector.add(quantifiedInput[size-1][currentCol]);
+					zigzagVector.add(quantifiedInput[size-1][currentCol + 1]);
 					nbVisitedElements[currentRow] += 2;
-					currentRow = height-2;
+					currentRow = size-2;
 					currentCol += 2;
 					direction = UP;
 					break;
@@ -101,8 +100,8 @@ public class ZigzagReaderWriter {
 					break;
 					
 				case RIGHT_EDGE : 
-					zigzagVector.add(quantifiedInput[currentRow][width-1]);
-					zigzagVector.add(quantifiedInput[currentRow+1][width-1]);
+					zigzagVector.add(quantifiedInput[currentRow][size-1]);
+					zigzagVector.add(quantifiedInput[currentRow+1][size-1]);
 					nbVisitedElements[currentRow] ++;
 					nbVisitedElements[currentRow+1] ++;
 					currentCol--;
@@ -133,7 +132,10 @@ public class ZigzagReaderWriter {
 		return zigzagVector;
 	}
 
-
+	/*
+	 * Reads a vector and outputs a square matrix
+	 * by writing values in zigzag
+	 */
 	public int[][] read(List<Integer> zigzagVector) {
 		int size = (int) Math.sqrt(zigzagVector.size());
 		int[][] quantifiedOutput = new int[size][size];
