@@ -56,18 +56,13 @@ public class YCbCrReaderWriter {
 			for (int j = 0; j < width; j++) {
 				
 				double[] normalizedRgbArray = new double[3];
-				normalizedRgbArray[0] = RGBImage[0][i][j] / _bpc;
-				normalizedRgbArray[1] = RGBImage[1][i][j] / _bpc;
-				normalizedRgbArray[2] = RGBImage[2][i][j] / _bpc;
+				normalizedRgbArray[0] = (double) (RGBImage[0][i][j] / _bpc);
+				normalizedRgbArray[1] = (double) (RGBImage[1][i][j] / _bpc);
+				normalizedRgbArray[2] = (double) (RGBImage[2][i][j] / _bpc);
 				
-				yCbCrImage.addColorComponentFromRGB(0, i, j, this.RGBtoY(i, j, normalizedRgbArray));
-				yCbCrImage.addColorComponentFromRGB(1, i, j, this.RGBtoCb(i, j, normalizedRgbArray));
-				yCbCrImage.addColorComponentFromRGB(2, i, j, this.RGBtoCr(i, j, normalizedRgbArray));
-				
-				// test
-				if (j<100) {
-					//System.out.println(RGBImage[0][i][j]);
-				}
+				yCbCrImage.addColorComponentFromRGB(0, i, j, (int) Math.ceil(this.RGBtoY(i, j, normalizedRgbArray)));
+				yCbCrImage.addColorComponentFromRGB(1, i, j, (int) Math.ceil(this.RGBtoCb(i, j, normalizedRgbArray)));
+				yCbCrImage.addColorComponentFromRGB(2, i, j, (int) Math.ceil(this.RGBtoCr(i, j, normalizedRgbArray)));
 				
 			}
 		}
@@ -76,16 +71,16 @@ public class YCbCrReaderWriter {
 	}
 	
 	
-	public double[][][] readYCbCr(YCbCrImageModel yCbCrImage) {
+	public int[][][] readYCbCr(YCbCrImageModel yCbCrImage) {
 		
 		// [colorChannel][height][width]
-		double[][][] rgbImage = new double[3][yCbCrImage.get_height()][yCbCrImage.get_width()];
+		int[][][] rgbImage = new int[3][yCbCrImage.get_height()][yCbCrImage.get_width()];
 		
 		for (int i = 0; i < yCbCrImage.get_height(); i++) {
 			
 			for (int j = 0; j < yCbCrImage.get_width(); j++) {
 				
-				double[] yCbCrArray = new double[3];
+				int[] yCbCrArray = new int[3];
 				yCbCrArray[0] = yCbCrImage.get_image()[0][i][j];
 				yCbCrArray[1] = yCbCrImage.get_image()[1][i][j];
 				yCbCrArray[2] = yCbCrImage.get_image()[2][i][j];
@@ -93,17 +88,6 @@ public class YCbCrReaderWriter {
 				rgbImage[0][i][j] = YCbCrToR(i, j, yCbCrArray);
 				rgbImage[1][i][j] = YCbCrToG(i, j, yCbCrArray);
 				rgbImage[2][i][j] = YCbCrToB(i, j, yCbCrArray);
-				
-				// test
-				if (j<100) {
-					
-					// perte d'information comparativement au RGB d'origine
-					// normal ? à cause des arrondissements
-					// pour le moment, on garde les informations en type Double (au lieu de int) et on fait
-					// un math.ceil pour garder le plus d'information possible
-					// System.out.println(rgbImage[0][i][j]);
-				}
-				
 			}
 		}
 		
@@ -111,29 +95,29 @@ public class YCbCrReaderWriter {
 		return rgbImage;
 	}
 	
-	private double RGBtoY(int row, int col, double[] normalizedRgbArray) {
-		return (double) (Y_R_FACTOR * normalizedRgbArray[0] + Y_G_FACTOR *  normalizedRgbArray[1] + Y_B_FACTOR *  normalizedRgbArray[2] + Y_ADJ);
+	private int RGBtoY(int row, int col, double[] normalizedRgbArray) {
+		return (int) ((Y_R_FACTOR * normalizedRgbArray[0] + Y_G_FACTOR *  normalizedRgbArray[1] + Y_B_FACTOR *  normalizedRgbArray[2] + Y_ADJ));
 	}
 
-	private double RGBtoCb(int row, int col, double[] normalizedRgbArray) {
-		return (double) (CB_R_FACTOR * normalizedRgbArray[0] + CB_G_FACTOR *  normalizedRgbArray[1] + CB_B_FACTOR *  normalizedRgbArray[2] + CB_ADJ);
+	private int RGBtoCb(int row, int col, double[] normalizedRgbArray) {
+		return (int) (((CB_R_FACTOR * normalizedRgbArray[0]) + (CB_G_FACTOR *  normalizedRgbArray[1]) + (CB_B_FACTOR *  normalizedRgbArray[2]) + CB_ADJ));
 	}
 	
-	private double RGBtoCr(int row, int col, double[] normalizedRgbArray) {
-		return (double) (CR_R_FACTOR * normalizedRgbArray[0] + CR_G_FACTOR *  normalizedRgbArray[1] + CR_B_FACTOR *  normalizedRgbArray[2] + CR_ADJ);
+	private int RGBtoCr(int row, int col, double[] normalizedRgbArray) {
+		return (int) ((CR_R_FACTOR * normalizedRgbArray[0] + CR_G_FACTOR *  normalizedRgbArray[1] + CR_B_FACTOR *  normalizedRgbArray[2] + CR_ADJ));
 	}
 	
 	/* http://www.equasys.de/colorconversion.html */
-	private double YCbCrToR(int row, int col, double[] yCbCrArray){
-		return (double) (Math.ceil(R_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(R_CR_FACTOR * (yCbCrArray[2] - CR_ADJ)));
+	private int YCbCrToR(int row, int col, int[] yCbCrArray){
+		return (int) (Math.floor(R_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(R_CR_FACTOR * (yCbCrArray[2] - CR_ADJ)));
 	}
 	
-	private double YCbCrToG(int row, int col, double[] yCbCrArray){
-		return (double) (Math.ceil(G_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(G_CB_FACTOR * (yCbCrArray[1] - CB_ADJ)) + Math.ceil(G_CR_FACTOR * (yCbCrArray[2] - CR_ADJ)));
+	private int YCbCrToG(int row, int col, int[] yCbCrArray){
+		return (int) (Math.floor(G_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(G_CB_FACTOR * (yCbCrArray[1] - CB_ADJ)) + Math.ceil(G_CR_FACTOR * (yCbCrArray[2] - CR_ADJ)));
 	}
 	
-	private double YCbCrToB(int row, int col, double[] yCbCrArray){
-		return (double) (Math.ceil(B_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(B_CB_FACTOR * (yCbCrArray[1] - CB_ADJ)));
+	private int YCbCrToB(int row, int col, int[] yCbCrArray){
+		return (int) (Math.floor(B_Y_FACTOR * (yCbCrArray[0] - Y_ADJ)) + Math.ceil(B_CB_FACTOR * (yCbCrArray[1] - CB_ADJ)));
 	}
 
 
