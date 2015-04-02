@@ -50,14 +50,8 @@ public class Main {
 		YCbCrReaderWriter yCbCrCodec = new YCbCrReaderWriter();
 		int[][][] RGBImage = PPMReaderWriter.readPPMFile("medias/lena.ppm"); // testing
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
-		yCbCrCodec.readYCbCr(yCbCrImage);
+		SZLImageModel image = new SZLImageModel(yCbCrImage.get_height(),yCbCrImage.get_width(),yCbCrImage.get_image());
 		
-		/* DCT */
-		DCTUtils.testEncode(true);
-		DCTUtils.testDecode(true);
-		
-		/* ZIGZAG */
-		ZigzagReaderWriter zigzag = new ZigzagReaderWriter();
 
 	}
 }
