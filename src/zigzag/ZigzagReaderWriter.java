@@ -30,7 +30,7 @@ public class ZigzagReaderWriter {
 		6|		               0            1  2         3  4     5  6 7
 		7|									 01           23       45   67
 	*/
-	public LinkedList<Integer> write(int[][] quantifiedInput) {
+	public int[][] write(int[][] quantifiedInput) {
 		LinkedList<Integer> zigzagVector = new LinkedList<Integer>();
 		
 		int currentRow = 0;
@@ -41,6 +41,9 @@ public class ZigzagReaderWriter {
 		int size = quantifiedInput.length;
 		
 		int[] nbVisitedElements = new int[size];
+		
+		int[][] zigzagOutput = new int[size][size];
+		
 		
 		/*
 		 * While the last row hasn't been fully visited
@@ -106,16 +109,26 @@ public class ZigzagReaderWriter {
 			}
 			
 		}
-		return zigzagVector;
+		
+		
+		// put in 2d array
+		for (int i = 0; i < zigzagOutput.length; i++) {
+			for (int j = 0; j < zigzagOutput[i].length; j++) {
+				zigzagOutput[i][j] = zigzagVector.remove(0);
+			}
+		}
+		
+		return zigzagOutput;
 	}
 
 	/*
 	 * Reads a vector and outputs a square matrix
 	 * by writing values in zigzag
 	 */
-	public int[][] read(List<Integer> zigzagVector) {
-		int size = (int) Math.sqrt(zigzagVector.size());
+	public int[][] read(int[][] zigzagArray) {
+		int size = zigzagArray.length;
 		int[][] quantifiedOutput = new int[size][size];
+		LinkedList<Integer> zigzagVector = new LinkedList();
 		
 		int[] nbInsertedElements = new int[size];
 		
@@ -124,6 +137,15 @@ public class ZigzagReaderWriter {
 		
 		int direction = UP;
 		
+		
+		/*
+		 * Convert input to 1D vector
+		 */
+		for (int i = 0; i < zigzagArray.length; i++) {
+			for (int j = 0; j < zigzagArray[i].length; j++) {
+				zigzagVector.add(zigzagArray[i][j]);
+			}
+		}
 		
 		/*
 		 * While the first row hasn't been fully visited
