@@ -1,23 +1,35 @@
 package yCbCr;
 
 public class YCbCrImageModel {
-	double[][][] _image;
+	int[][][] _image;
+	double[][][] _imageDouble;
 	int _width;
 	int _height;
 
 	public YCbCrImageModel(int height, int width){
 		_width = width;
 		_height = height;
-		_image = new double[3][height][width];
+		_image = new int[3][height][width];
+		_imageDouble = new double[3][height][width];
 	}
 	
-	public void addColorComponentFromRGB(int channelIndex, int row, int col, double value) {
+	public void addColorComponentFromRGB(int channelIndex, int row, int col, int value) {
 		_image[channelIndex][row][col] = value;
 	}
+	
+	public void addColorComponentFromRGBDouble(int channelIndex, int row, int col, double value) {
+		_imageDouble[channelIndex][row][col] = value;
+	}
 
-	public double[][][] get_image() {
+
+	public int[][][] get_image() {
 		return _image;
 	}
+	
+	public double[][][] get_imageDouble() {
+		return _imageDouble;
+	}
+
 
 	public int get_width() {
 		return _width;
