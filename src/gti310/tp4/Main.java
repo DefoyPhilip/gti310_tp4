@@ -1,4 +1,5 @@
 package gti310.tp4;
+import quantificationUtils.QuantificationUtils;
 import gti310.tp4.dct.DCTUtils;
 import yCbCr.YCbCrImageModel;
 import yCbCr.YCbCrReaderWriter;
@@ -51,6 +52,11 @@ public class Main {
 		int[][][] RGBImage = PPMReaderWriter.readPPMFile("medias/lena.ppm"); // testing
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
 		SZLImageModel image = new SZLImageModel(yCbCrImage.get_height(),yCbCrImage.get_width(),yCbCrImage.get_image());
+		for (int i = 0; i < image.getBlockQuantity(); i++) {
+			QuantificationUtils.quantY(DCTUtils.encode(image.getBlock(Y, i)), 50);
+			QuantificationUtils.quantCbCr(DCTUtils.encode(image.getBlock(Y, i)), 50);
+			QuantificationUtils.quantCbCr(DCTUtils.encode(image.getBlock(Y, i)), 50);
+		}
 		
 
 	}

@@ -5,9 +5,11 @@ public class SZLImageModel {
 	public final int Y_MATRIX = 0;
 	public final int Cb_MATRIX = 1;
 	public final int Cr_MATRIX = 2;
+	private int blocQuantity;
 	
 	public SZLImageModel(int height, int width, int[][][] YCbCr){
-		this.imageModel = new int[3][(width/8)*(height/8)][8][8];
+		this.blocQuantity = (width/8)*(height/8);
+		this.imageModel = new int[3][this.blocQuantity][8][8];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < YCbCr[i].length; j++) {
 				for (int x = 0; x < 8; x++) {
@@ -27,6 +29,9 @@ public class SZLImageModel {
 	}
 	public int[][] getBlock(int colorSpace, int bloc){
 		return imageModel[colorSpace][bloc];
+	}
+	public int getBlockQuantity(){
+		return this.blocQuantity;
 	}
 	public void writeBlock(int colorSpace, int blocIndex, int[][]bloc){
 		imageModel[colorSpace][blocIndex] = bloc;
