@@ -1,4 +1,5 @@
 package gti310.tp4;
+import dpcm.Dpcm;
 import gti310.tp4.dct.DCTUtils;
 import yCbCr.YCbCrImageModel;
 import yCbCr.YCbCrReaderWriter;
@@ -52,12 +53,7 @@ public class Main {
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
 		yCbCrCodec.readYCbCr(yCbCrImage);
 		
-		/* DCT */
-		DCTUtils.testEncode(true);
-		DCTUtils.testDecode(true);
-		
 		/* ZIGZAG */
 		ZigzagReaderWriter zigzag = new ZigzagReaderWriter();
-
 	}
 }
