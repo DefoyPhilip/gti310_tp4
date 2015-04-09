@@ -1,5 +1,5 @@
 package gti310.tp4;
-import gti310.tp4.dct.DCTUtils;
+import dct.DCTUtils;
 import yCbCr.YCbCrImageModel;
 import yCbCr.YCbCrReaderWriter;
 import zigzag.ZigzagReaderWriter;

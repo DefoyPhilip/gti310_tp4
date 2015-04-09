@@ -1,4 +1,4 @@
-package gti310.tp4.dct;
+package dct;
 
 public class DCTUtils {
 	private static int[][] _testArrayNoDct = new int[][]{
