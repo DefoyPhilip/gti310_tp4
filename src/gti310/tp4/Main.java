@@ -1,5 +1,6 @@
 package gti310.tp4;
 import dct.DCTUtils;
+import dpcm.Dpcm;
 import yCbCr.YCbCrImageModel;
 import yCbCr.YCbCrReaderWriter;
 import zigzag.ZigzagReaderWriter;
@@ -58,6 +59,6 @@ public class Main {
 		
 		/* ZIGZAG */
 		ZigzagReaderWriter zigzag = new ZigzagReaderWriter();
-
+		Dpcm.testWriteDC();
 	}
 }
