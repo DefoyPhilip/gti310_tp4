@@ -1,4 +1,6 @@
 package gti310.tp4;
+import java.util.Arrays;
+
 import quantificationUtils.QuantificationUtils;
 import dct.DCTUtils;
 import dpcm.Dpcm;
@@ -56,9 +58,28 @@ public class Main {
 		
 		SZLImageModel image = new SZLImageModel(yCbCrImage.get_height(),yCbCrImage.get_width(),yCbCrImage.get_image());
 			for (int i = 0; i < image.getBlockQuantity(); i++) {
-				QuantificationUtils.quantY(DCTUtils.encode(image.getBlock(Y, i)), 50);
-				QuantificationUtils.quantCbCr(DCTUtils.encode(image.getBlock(Y, i)), 50);
-				QuantificationUtils.quantCbCr(DCTUtils.encode(image.getBlock(Y, i)), 50);
+				image.writeBlock(Y, i,
+						ZigzagReaderWriter.write(
+								QuantificationUtils.quantY(
+										DCTUtils.encode(image.getBlock(Y, i)
+								),50)
+						)
+				);
+				image.writeBlock(U, i,
+						ZigzagReaderWriter.write(
+								QuantificationUtils.quantCbCr(
+										DCTUtils.encode(image.getBlock(U, i)
+								), 50)
+						)
+				);
+				image.writeBlock(V, i,
+						ZigzagReaderWriter.write(
+								QuantificationUtils.quantCbCr(
+										DCTUtils.encode(image.getBlock(V, i)
+								), 50)
+						)
+				);
 			}
+		image.logModel();
 	}
 }

@@ -30,7 +30,7 @@ public class ZigzagReaderWriter {
 		6|		               0            1  2         3  4     5  6 7
 		7|									 01           23       45   67
 	*/
-	public int[][] write(int[][] quantifiedInput) {
+	static public int[][] write(int[][] quantifiedInput) {
 		LinkedList<Integer> zigzagVector = new LinkedList<Integer>();
 		
 		int currentRow = 0;
@@ -125,7 +125,7 @@ public class ZigzagReaderWriter {
 	 * Reads a vector and outputs a square matrix
 	 * by writing values in zigzag
 	 */
-	public int[][] read(int[][] zigzagArray) {
+	static public int[][] read(int[][] zigzagArray) {
 		int size = zigzagArray.length;
 		int[][] quantifiedOutput = new int[size][size];
 		LinkedList<Integer> zigzagVector = new LinkedList();
@@ -216,7 +216,7 @@ public class ZigzagReaderWriter {
 		return quantifiedOutput;
 	}
 	
-	private int whichEdge(int row, int col, int height, int width){
+	static private int whichEdge(int row, int col, int height, int width){
 		if (row == 0)
 			return TOP_EDGE;
 		if (row == height - 1)
@@ -230,7 +230,7 @@ public class ZigzagReaderWriter {
 	}
 	
 	
-	public void print(List<Integer> zigzagVector){
+	static public void print(List<Integer> zigzagVector){
 		
 		System.out.println("/////// zigzag write //////");
 		int c = 0;
@@ -250,7 +250,7 @@ public class ZigzagReaderWriter {
 		System.out.println("");
 	}
 	
-	public void print(int[][] quantified){
+	static public void print(int[][] quantified){
 		System.out.println("");
 		System.out.println("/////// zigzag read //////");
 		for (int i = 0; i < quantified.length; i++) {
