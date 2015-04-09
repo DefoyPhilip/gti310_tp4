@@ -1,4 +1,5 @@
 package gti310.tp4;
+import quantificationUtils.QuantificationUtils;
 import dct.DCTUtils;
 import dpcm.Dpcm;
 import yCbCr.YCbCrImageModel;
@@ -53,12 +54,11 @@ public class Main {
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
 		yCbCrCodec.readYCbCr(yCbCrImage);
 		
-		/* DCT */
-		DCTUtils.testEncode(true);
-		DCTUtils.testDecode(true);
-		
-		/* ZIGZAG */
-		ZigzagReaderWriter zigzag = new ZigzagReaderWriter();
-		Dpcm.testWriteDC();
+		SZLImageModel image = new SZLImageModel(yCbCrImage.get_height(),yCbCrImage.get_width(),yCbCrImage.get_image());
+			for (int i = 0; i < image.getBlockQuantity(); i++) {
+				QuantificationUtils.quantY(DCTUtils.encode(image.getBlock(Y, i)), 50);
+				QuantificationUtils.quantCbCr(DCTUtils.encode(image.getBlock(Y, i)), 50);
+				QuantificationUtils.quantCbCr(DCTUtils.encode(image.getBlock(Y, i)), 50);
+			}
 	}
 }
