@@ -27,18 +27,29 @@ public class ZigzagReaderWriterTest {
 			46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 
 			62, 63, 64));
 	
+	public int[][] zigzagArray = new int[][]{
+			new int[]{	1,		2,		3,		4,		5,		6,		7,		8},		
+			new int[]{	9,		10,		11,		12,		13,		14,		15,		16},		
+			new int[]{	17,		18,		19,		20,		21,		22,		23,		24},		
+			new int[]{	25,		26,		27,		28,		29,		30,		31,		32},		
+			new int[]{	33,		34,		35,		36,		37,		38,		39,		40},		
+			new int[]{	41,		42,		43,		44,		45,		46,		47,		48},		
+			new int[]{	49,		50,		51,		52,		53,		54,		55,		56},		
+			new int[]{	57,		58,		59,		60,		61,		62,		63,		64}	
+		};
+	
 	private ZigzagReaderWriter zigzag = new ZigzagReaderWriter();
 	
 	@Test
 	public void testWrite() {
-		LinkedList<Integer> outputVector = zigzag.write(quantified);
-		assertThat(outputVector, is(zigzagVector));
+		int[][] outputArray = zigzag.write(quantified);
+		assertArrayEquals(outputArray, zigzagArray);
 		
 	}
 	
 	@Test
 	public void testRead() {
-		int[][] quantifiedOutput = zigzag.read(zigzagVector);
+		int[][] quantifiedOutput = zigzag.read(zigzagArray);
 		assertArrayEquals(quantified, quantifiedOutput);
 	}
 
