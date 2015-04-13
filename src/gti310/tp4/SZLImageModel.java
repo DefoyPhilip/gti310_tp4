@@ -22,6 +22,7 @@ public class SZLImageModel {
 			
 		}
 	}
+	
 	public int getPixel(int colorSpace, int bloc, int x, int y){
 		return imageModel[colorSpace][bloc][x][y];
 	}
