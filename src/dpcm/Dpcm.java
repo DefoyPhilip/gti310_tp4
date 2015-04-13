@@ -1,29 +1,23 @@
 package dpcm;
 
 public class Dpcm {
-	private static int[] storedDC;
-	private static int[][][] testDC = new int[][][]{
-		new int[][]{new int[]{150}},
-		new int[][]{new int[]{155}},
-		new int[][]{new int[]{149}},
-		new int[][]{new int[]{152}},
-		new int[][]{new int[]{144}}
-	};
+	private static int[][] storedDC = new int[3][];
 	
-	public static int[] writeDC(int[][][] colorSpace){
-		storedDC = new int[colorSpace.length];
-		for (int i = colorSpace.length-1; i > 0  ; i--) {
-			storedDC[i] = colorSpace[i][0][0] - colorSpace[i-1][0][0];
+	public static void dpcmInverse(int[] dcs, int colorSpaceIndex){
+		storedDC[colorSpaceIndex] = new int[dcs.length];
+		storedDC[colorSpaceIndex][0] = dcs[0];
+		for (int i = 1; i < dcs.length; i++) {
+			storedDC[colorSpaceIndex][i] = dcs[i-1] + dcs[i];
 		}
-		storedDC[0] = colorSpace[0][0][0];
-		return storedDC;
 	}
-	public static void testWriteDC(){
-		int[] test = writeDC(testDC);
-		System.out.println(test[0]);
-		System.out.println(test[1]);
-		System.out.println(test[2]);
-		System.out.println(test[3]);
-		System.out.println(test[4]);
+	public static void dpcm(int[][][] colorSpace, int colorSpaceIndex){
+		storedDC[colorSpaceIndex] = new int[colorSpace.length];
+		for (int i = colorSpace.length-1; i > 0  ; i--) {
+			storedDC[colorSpaceIndex][i] = colorSpace[i][0][0] - colorSpace[i-1][0][0];
+		}
+		storedDC[colorSpaceIndex][0] = colorSpace[0][0][0];
+	}
+	public static int getDC(int colorSpaceIndex,int index){
+		return storedDC[colorSpaceIndex][index];
 	}
 }
