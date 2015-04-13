@@ -1,6 +1,8 @@
 package acUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ACUtils {
 
@@ -40,5 +42,38 @@ public class ACUtils {
 		
 		return runlengthValueList;
 		
+	}
+	
+	public static int[][] readAC(List<int[]> runlengthValueList) {
+		
+		ArrayList<Integer> zigzagList = new ArrayList<Integer>();
+		int[][] zigzagArray = new int[8][8];
+		int startingCol = 1;
+		
+		
+		for (int[] couples : runlengthValueList) {
+			if (couples[0] == 0 && couples[1] != 0) {
+				zigzagList.add(couples[1]);
+			} else if (couples[0] > 0) {
+				for (int k = 0; k < couples[0]; k++) {
+					zigzagList.add(0);
+				}
+				zigzagList.add(couples[1]);
+			} 
+		}
+		
+		// transform list into 2D array
+		for (int i = 0; i < zigzagArray.length; i++) {
+			for (int j = startingCol; j < zigzagArray[i].length; j++) {
+				if (!zigzagList.isEmpty())
+					zigzagArray[i][j] = zigzagList.remove(0);
+				else
+					break;
+			}
+			
+			startingCol = 0;
+		}
+		
+		return zigzagArray;
 	}
 }
