@@ -51,8 +51,6 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
-		System.out.println(args[0]);
-		System.out.println(args[1]);
 		if(args.length == 3){
 			System.out.println(args[2]);
 			encode(args);
@@ -72,30 +70,29 @@ public class Main {
 		yCbCrCodec.readYCbCr(yCbCrImage);
 		
 		SZLImageModel image = new SZLImageModel(yCbCrImage.get_height(),yCbCrImage.get_width(),yCbCrImage.get_image());
-		System.out.println(image.getBlockQuantity());
-			for (int i = 0; i < image.getBlockQuantity(); i++) {
-				image.writeBlock(Y, i,
-						ZigzagReaderWriter.write(
-								QuantificationUtils.quantY(
-										DCTUtils.encode(image.getBlock(Y, i)
-								),fq)
-						)
-				);
-				image.writeBlock(U, i,
-						ZigzagReaderWriter.write(
-								QuantificationUtils.quantCbCr(
-										DCTUtils.encode(image.getBlock(U, i)
-								), fq)
-						)
-				);
-				image.writeBlock(V, i,
-						ZigzagReaderWriter.write(
-								QuantificationUtils.quantCbCr(
-										DCTUtils.encode(image.getBlock(V, i)
-								), fq)
-						)
-				);
-			}
+		for (int i = 0; i < image.getBlockQuantity(); i++) {
+			image.writeBlock(Y, i,
+					ZigzagReaderWriter.write(
+							QuantificationUtils.quantY(
+									DCTUtils.encode(image.getBlock(Y, i))
+							,fq)
+					)
+			);
+			image.writeBlock(U, i,
+					ZigzagReaderWriter.write(
+							QuantificationUtils.quantCbCr(
+									DCTUtils.encode(image.getBlock(U, i))
+							, fq)
+					)
+			);
+			image.writeBlock(V, i,
+					ZigzagReaderWriter.write(
+							QuantificationUtils.quantCbCr(
+									DCTUtils.encode(image.getBlock(V, i))
+							, fq)
+					)
+			);
+		}
 		Dpcm.dpcm(image.getColorSpace(Y), Y);
 		Dpcm.dpcm(image.getColorSpace(U), U);
 		Dpcm.dpcm(image.getColorSpace(V), V);
@@ -114,11 +111,16 @@ public class Main {
 	private static void decode(String[] args){
 		int[] header = SZLReaderWriter.readSZLFile(args[0]);
 		int blocQuanity = (header[1]/8)*(header[0]/8) * header[2];
+		SZLImageModel image = new SZLImageModel(header[0],header[1]);
+		int[][] storedDc = new int[3][blocQuanity/3];
 		for (int i = 0; i < blocQuanity; i++) {
-			int dc = Entropy.readDC();
 			int[] ac;
 			boolean val;
+			int blocIndex = (int)(Math.ceil(i/3));
 			LinkedList<int[]> runlengthValueList = new LinkedList<int[]>();
+			//Get Dc and store it
+			storedDc[i % 3][blocIndex] = Entropy.readDC();
+			//Get Ac
 			do {
 				ac = Entropy.readAC();
 				int[] runlengthValue = new int[2];
@@ -127,23 +129,41 @@ public class Main {
 				runlengthValueList.add(runlengthValue);
 				val = ac[0] == ac[1] && ac[0] == 0;
 			} while (!val);
-			System.out.println("bloc:"+(int)(Math.ceil(i/3)+1));
-			if( i % 3 == 0)
-				System.out.println("Y");
-			else if(i % 3 == 1)
-				System.out.println("Cb");
-			else
-				System.out.println("Cr");
-			// image = new SZLIMageModel(header[0],header[1])
-			//ac(runlengthValueList) => zigzag 8x8
-			//image.writeBloc(zigzag)
-			// le bon a storer
-			// int[] storedDcY[] = dc
-			// int[] storedDcCb[] = dc
-			// int[] storedDcCr[] = dc
-			// rewrite les dc avec dpcm inverse
-			// image.writePixel(colorSpace,bloc,0,0)
-			//roule algo inversse
-		}	
+			image.writeBlock(i % 3, blocIndex, ACUtils.readAC(runlengthValueList));
+		}
+		for (int i = 0; i < 3; i++) {
+			Dpcm.dpcmInverse(storedDc[i], i);
+			for (int j = 0; j < 1024; j++) {
+				image.writePixel(i,j,0,0,Dpcm.getDC(i, j));
+				if(i == 0){
+					image.writeBlock(i, j, 
+						DCTUtils.decode(
+							QuantificationUtils.dequantY(
+								ZigzagReaderWriter.read(
+									image.getBlock(i, j)
+								), header[3]
+							)
+						)
+					);
+				}
+				else{
+					image.writeBlock(i, j, 
+						DCTUtils.decode(
+							QuantificationUtils.dequantCbCr(
+								ZigzagReaderWriter.read(
+									image.getBlock(i, j)
+								), header[3]
+							)
+						)
+					);
+				}	
+			}
+		}
+		int[][][] imageRecouper = image.recoupage();
+		YCbCrReaderWriter yCbCrCodec = new YCbCrReaderWriter();
+		YCbCrImageModel yCbCrImage = new YCbCrImageModel(header[0],header[1]);
+		yCbCrImage.set_image(imageRecouper);
+		yCbCrCodec.readYCbCr(yCbCrImage);
+		PPMReaderWriter.writePPMFile(args[1], yCbCrCodec.readYCbCr(yCbCrImage));
 	}
 }
