@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ACUtils {
 
-	public LinkedList<int[]> prepareACWrite(int[][] zigzag) {
+	public static LinkedList<int[]> prepareACWrite(int[][] zigzag) {
 		LinkedList<int[]> runlengthValueList = new LinkedList<int[]>();
 		
 		

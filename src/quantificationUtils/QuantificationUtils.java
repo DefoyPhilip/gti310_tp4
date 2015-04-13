@@ -54,6 +54,9 @@ public class QuantificationUtils {
 		return dequant(input,fq,tableCbCr);
 	}
 	private static int[][] quant(int[][] input, int fq, int[][] table){
+		if(fq == 100){
+			return input;
+		}
 		float alpha = getAlpha(fq);
 		int[][] output = new int[input.length][input.length];
 		for (int i = 0; i < input.length; i++) {
@@ -64,6 +67,9 @@ public class QuantificationUtils {
 		return output;
 	}
 	private static int[][] dequant(int[][] input, int fq, int[][] table){
+		if(fq == 100){
+			return input;
+		}
 		float alpha = getAlpha(fq);
 		int[][] output = new int[input.length][input.length];
 		for (int i = 0; i < input.length; i++) {
@@ -75,14 +81,14 @@ public class QuantificationUtils {
 	}
 	private static float getAlpha(int fq){
 		float alpha = 0;
-		if(fq >= 1 && fq <= 50){
+		if(fq >= 1 && fq < 50){
 			alpha = 50/fq;
 		}
-		else if(fq > 50 && fq <= 99){
+		else if(fq >= 50 && fq <= 99){
 			alpha = (float)(200-(2*fq))/100;
 		}
 		else{
-			System.out.println("Facteur de qualité non supporté");
+			System.out.println("Facteur de qualitï¿½ non supportï¿½");
 		}
 		return alpha;
 	}
