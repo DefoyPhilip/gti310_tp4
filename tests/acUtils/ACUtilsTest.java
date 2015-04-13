@@ -23,6 +23,17 @@ public class ACUtilsTest {
 			new int[]{	0,		0,		0,		0,		0,		0,		0,		0}
 		};
 	
+	public int[][] acOnlyZigzag = new int[][]{
+			new int[]{	0,		6,		-1,		-1,		0,		-1,		0,		0},		
+			new int[]{	0,		1,		0,		0,		1,		0,		0,		0},		
+			new int[]{	0,		0,		0,		0,		0,		0,		0,		0},			
+			new int[]{	0,		0,		0,		0,		0,		0,		0,		0},		
+			new int[]{	0,		0,		0,		0,		0,		0,		0,		0},			
+			new int[]{	0,		0,		0,		0,		0,		0,		0,		0},			
+			new int[]{	0,		0,		0,		0,		0,		0,		0,		0},			
+			new int[]{	0,		0,		0,		0,		0,		0,		0,		0}
+		};
+	
 	public List<int[]> runlengthValueList = new ArrayList<int[]>();
 	
 
@@ -35,10 +46,20 @@ public class ACUtilsTest {
 		
 		int i = 0;
 		for (int[] is : outputList) {
-			assertArrayEquals(is, runlengthValueList.get(i));
+			assertArrayEquals(runlengthValueList.get(i), is);
 			i++;
 		}
 		
+	}
+	
+	@Test
+	public void readACTest() {
+		System.out.println("Testing readACTest()");
+		initRunLengthValueList();
+		int[][] zigzagReturn = ACUtils.readAC(runlengthValueList);
+		
+		assertArrayEquals(acOnlyZigzag, zigzagReturn);
+	
 	}
 	
 	private void initRunLengthValueList(){
