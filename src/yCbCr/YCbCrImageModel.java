@@ -25,6 +25,9 @@ public class YCbCrImageModel {
 	public int[][][] get_image() {
 		return _image;
 	}
+	public void set_image(int[][][] image){
+		_image = image;
+	}
 	
 	public double[][][] get_imageDouble() {
 		return _imageDouble;

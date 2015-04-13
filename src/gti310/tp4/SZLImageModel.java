@@ -7,12 +7,17 @@ public class SZLImageModel {
 	public final int Cr_MATRIX = 2;
 	private int blocQuantity;
 	
+	public SZLImageModel(int height, int width){
+		this.blocQuantity = (width/8)*(height/8);
+		this.imageModel = new int[3][this.blocQuantity][8][8];
+	}
+	
 	public SZLImageModel(int height, int width, int[][][] YCbCr){
 		this.blocQuantity = (width/8)*(height/8);
 		this.imageModel = new int[3][this.blocQuantity][8][8];
 		int blocPerLine = width/8;
 		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < YCbCr[i].length; j++) {
+			for (int j = 0; j < blocQuantity; j++) {
 				for (int x = 0; x < 8; x++) {
 					for (int y = 0; y < 8; y++) {
 						imageModel[i][j][x][y] = YCbCr[i][x + (8*(int)(Math.floor(j/blocPerLine) ))][y+(8* (j % blocPerLine) )];
@@ -42,6 +47,24 @@ public class SZLImageModel {
 	}
 	public void writeColorSpace(int colorSpaceIndex, int[][][] colorSpace){
 		imageModel[colorSpaceIndex] = colorSpace;
+	}
+	public int[][][]recoupage(){
+		int blocQuantity = imageModel[0].length;
+		int dimension = (int) Math.sqrt(blocQuantity)*8;
+		int blocPerLine = dimension/8;
+		System.out.println(dimension);
+		int[][][] image = new int[3][dimension][dimension];
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < blocQuantity; j++) {
+				for (int x = 0; x < 8; x++) {
+					for (int y = 0; y < 8; y++) {
+						image[i][x + (8*(int)(Math.floor(j/blocPerLine) ))][y+(8* (j % blocPerLine) )] = imageModel[i][j][x][y]; 
+					}
+				}
+			}
+			
+		}
+		return image;
 	}
 	public void logModel(){
 		for (int i = 0; i < blocQuantity; i++) {
