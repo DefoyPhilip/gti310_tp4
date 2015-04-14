@@ -16,7 +16,13 @@ public class ZigzagReaderWriter {
 	private static final int DOWN = 6;
 	
 	
-	/*
+	/**
+	 * Parses a matrix using a zigzag trajectory, returns a matrix
+	 * of equal dimensions, but with reordered elements
+	 * 
+	 * Notation O(n^2)
+	 * @param quantifiedInput
+	 * @return int[][]
 	 * 
 	 * For square matrix input only, minimum 3x3
 	 * Example trajectory for 8x8 matrix : 
@@ -29,11 +35,6 @@ public class ZigzagReaderWriter {
 		5|                    0 1          2    3       4    5   6    7
 		6|		               0            1  2         3  4     5  6 7
 		7|									 01           23       45   67
-	*/
-	/**
-	 * Notation O(n^2)
-	 * @param quantifiedInput
-	 * @return
 	 */
 	static public int[][] write(int[][] quantifiedInput) {
 		LinkedList<Integer> zigzagVector = new LinkedList<Integer>();
@@ -56,7 +57,7 @@ public class ZigzagReaderWriter {
 		 */
 		while (nbVisitedElements[size - 1] < size) {
 			int edge = whichEdge(currentRow, currentCol, size, size);
-			//System.out.println("[" + currentRow + "][" + currentCol + "]" + " => " + edge);
+
 			switch (edge) {
 				case TOP_EDGE :
 					zigzagVector.add(quantifiedInput[currentRow][currentCol]);
@@ -126,9 +127,16 @@ public class ZigzagReaderWriter {
 		return zigzagOutput;
 	}
 
-	/*
+
+	
+	/**
 	 * Reads a vector and outputs a square matrix
 	 * by writing values in zigzag
+	 * 
+	 * Notation O(n^2)
+	 * @param zigzagArray
+	 * @return int[][]
+	 * 
 	 */
 	static public int[][] read(int[][] zigzagArray) {
 		int size = zigzagArray.length;
@@ -158,7 +166,6 @@ public class ZigzagReaderWriter {
 		 */
 		while (nbInsertedElements[0] < size) {
 			int edge = whichEdge(currentRow, currentCol, size, size);
-			//System.out.println("[" + currentRow + "][" + currentCol + "]" + " => " + edge);
 			
 			switch (edge) {
 				case BOTTOM_EDGE :
@@ -221,6 +228,18 @@ public class ZigzagReaderWriter {
 		return quantifiedOutput;
 	}
 	
+	/**
+	 * Check if the current index is on an edge of the square matrix
+	 * if it is, check which edge it is
+	 * 
+	 * Notation O(n^2)
+	 * @param row
+	 * @param col
+	 * @param height
+	 * @param width
+	 * @return int
+	 * 
+	 */
 	static private int whichEdge(int row, int col, int height, int width){
 		if (row == 0)
 			return TOP_EDGE;
