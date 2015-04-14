@@ -6,6 +6,14 @@ import java.util.List;
 
 public class ACUtils {
 
+	/**
+	 * Return a linked list that contain every ac couple to send
+	 * them to the entropy class before writing the file
+	 * 
+	 * Notation O(n^2)
+	 * @param zigzag
+	 * @return
+	 */
 	public static LinkedList<int[]> prepareACWrite(int[][] zigzag) {
 		LinkedList<int[]> runlengthValueList = new LinkedList<int[]>();
 		
@@ -43,7 +51,14 @@ public class ACUtils {
 		return runlengthValueList;
 		
 	}
-	
+	/**
+	 * Read the info from the entropy file and create
+	 * an 8x8 bloc
+	 * 
+	 * Notation O(n^2)
+	 * @param runlengthValueList
+	 * @return
+	 */
 	public static int[][] readAC(List<int[]> runlengthValueList) {
 		
 		ArrayList<Integer> zigzagList = new ArrayList<Integer>();

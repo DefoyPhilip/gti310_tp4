@@ -30,6 +30,11 @@ public class ZigzagReaderWriter {
 		6|		               0            1  2         3  4     5  6 7
 		7|									 01           23       45   67
 	*/
+	/**
+	 * Notation O(n^2)
+	 * @param quantifiedInput
+	 * @return
+	 */
 	static public int[][] write(int[][] quantifiedInput) {
 		LinkedList<Integer> zigzagVector = new LinkedList<Integer>();
 		

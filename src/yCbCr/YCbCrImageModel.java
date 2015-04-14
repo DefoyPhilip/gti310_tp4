@@ -6,6 +6,13 @@ public class YCbCrImageModel {
 	int _width;
 	int _height;
 
+	/**
+	 * Image model used to convert RGB images to YCbCr
+	 * 
+	 * @param height
+	 * @param width
+	 */
+	
 	public YCbCrImageModel(int height, int width){
 		_width = width;
 		_height = height;

@@ -21,6 +21,13 @@ public class DCTUtils {
 		new int[]{3,-2,-3,3,3,-1,-1,3},
 		new int[]{-2,5,-2,4,-2,2,-3,0}
 	};
+	/**
+	 * Decode an 8x8 bloc with inverse dct
+	 * 
+	 * Notation O(n^4)
+	 * @param input
+	 * @return
+	 */
 	public static int[][] decode(int[][] input){
 		int[][] output = new int[input.length][input[0].length];
 		for (int i = 0; i < input.length; i++) {
@@ -42,6 +49,13 @@ public class DCTUtils {
 		}
 		return output;
 	}
+	/**
+	 * Encode an 8x8 bloc with dct
+	 * 
+	 * Notation O(n^4)
+	 * @param input
+	 * @return
+	 */
 	public static int[][] encode(int[][] input){
 		int[][] output = new int[input.length][input[0].length];
 		for (int u = 0; u < input.length; u++) {

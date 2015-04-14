@@ -53,6 +53,16 @@ public class QuantificationUtils {
 	public static int[][] dequantCbCr(int[][] input, int fq){
 		return dequant(input,fq,tableCbCr);
 	}
+	/**
+	 * Apply quantification to an 8x8 bloc with an alpha coefficient
+	 * and a quantification table
+	 * 
+	 * Notation O(n^2)
+	 * @param input
+	 * @param fq
+	 * @param table
+	 * @return
+	 */
 	private static int[][] quant(int[][] input, int fq, int[][] table){
 		if(fq == 100){
 			return input;
@@ -66,6 +76,16 @@ public class QuantificationUtils {
 		}
 		return output;
 	}
+	/**
+	 * Undo quantification to an 8x8 bloc with an alpha coefficient
+	 * and a quantification table
+	 * 
+	 * Notation O(n^2)
+	 * @param input
+	 * @param fq
+	 * @param table
+	 * @return
+	 */
 	private static int[][] dequant(int[][] input, int fq, int[][] table){
 		if(fq == 100){
 			return input;
@@ -79,6 +99,11 @@ public class QuantificationUtils {
 		}
 		return output;
 	}
+	/**
+	 * Calculate the alpha coefficient based on the quality factor given by the user
+	 * @param fq
+	 * @return
+	 */
 	private static float getAlpha(int fq){
 		float alpha = 0;
 		if(fq >= 1 && fq < 50){

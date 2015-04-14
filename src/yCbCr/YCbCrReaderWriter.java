@@ -40,7 +40,13 @@ public class YCbCrReaderWriter {
 	public YCbCrReaderWriter() {
 		
 	}
-	
+	/**
+	 * Apply calculation to change a RGB images to a YCbCr
+	 * 
+	 * Notation O(n^2)
+	 * @param RGBImage
+	 * @return
+	 */
 	public YCbCrImageModel writeYCbCr(int[][][] RGBImage) {
 		
 		//[nbChannels][height][width]
@@ -70,7 +76,13 @@ public class YCbCrReaderWriter {
 		return yCbCrImage;
 	}
 	
-	
+	/**
+	 * Change a YCbCr image to a RGB image
+	 * 
+	 * Notation O(n^2)
+	 * @param yCbCrImage
+	 * @return
+	 */
 	public int[][][] readYCbCr(YCbCrImageModel yCbCrImage) {
 		
 		// [colorChannel][height][width]
