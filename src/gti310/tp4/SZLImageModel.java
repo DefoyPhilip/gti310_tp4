@@ -11,7 +11,18 @@ public class SZLImageModel {
 		this.blocQuantity = (width/8)*(height/8);
 		this.imageModel = new int[3][this.blocQuantity][8][8];
 	}
-	
+	/**
+	 * Image model: int[][][][]
+	 * 	Fisrt dimension:	Color space( Y, Cb, Cr)
+	 * 	Second dimension:	8x8 bloc
+	 * 	Third dimension:	Horizontal position of a pixel in an 8x8 bloc
+	 * 	Fourth dimension:	Vertical position of a pixel in an 8x8 bloc
+	 * 
+	 * Notation O(n^2)
+	 * @param height
+	 * @param width
+	 * @param YCbCr
+	 */
 	public SZLImageModel(int height, int width, int[][][] YCbCr){
 		this.blocQuantity = (width/8)*(height/8);
 		this.imageModel = new int[3][this.blocQuantity][8][8];
@@ -48,6 +59,12 @@ public class SZLImageModel {
 	public void writeColorSpace(int colorSpaceIndex, int[][][] colorSpace){
 		imageModel[colorSpaceIndex] = colorSpace;
 	}
+	/**
+	 * Switch back our data model to a normal three dimensional array
+	 * 
+	 * Notation O(n^2)
+	 * @return
+	 */
 	public int[][][]recoupage(){
 		int blocQuantity = imageModel[0].length;
 		int dimension = (int) Math.sqrt(blocQuantity)*8;

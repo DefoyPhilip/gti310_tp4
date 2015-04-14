@@ -60,43 +60,52 @@ public class Main {
 		}
 		
 	}
+	/**
+	 * Notation O(n^4)
+	 * @param args
+	 */
+	
 	private static void encode(String[] args){
 		int fq = Integer.parseInt(args[0]);
 
-		/* YCBCR*/
+		//Create a YCbCr images with the rgb ppm image
 		YCbCrReaderWriter yCbCrCodec = new YCbCrReaderWriter();
 		int[][][] RGBImage = PPMReaderWriter.readPPMFile(args[1]); // testing
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
 		yCbCrCodec.readYCbCr(yCbCrImage);
 		
+		//Instanciacte our data model (check class to see the structure)
 		SZLImageModel image = new SZLImageModel(yCbCrImage.get_height(),yCbCrImage.get_width(),yCbCrImage.get_image());
+		//rewriting each 8x8 bloc after applying Zigzag, quantification and DCT algorithm
 		for (int i = 0; i < image.getBlockQuantity(); i++) {
 			image.writeBlock(Y, i,
-					ZigzagReaderWriter.write(
-							QuantificationUtils.quantY(
-									DCTUtils.encode(image.getBlock(Y, i))
+					ZigzagReaderWriter.write(//O(n^2)
+							QuantificationUtils.quantY(//O(n^2)
+									DCTUtils.encode(image.getBlock(Y, i)) //O(n^4)
 							,fq)
 					)
 			);
 			image.writeBlock(U, i,
-					ZigzagReaderWriter.write(
-							QuantificationUtils.quantCbCr(
-									DCTUtils.encode(image.getBlock(U, i))
+					ZigzagReaderWriter.write(//O(n^2)
+							QuantificationUtils.quantCbCr(//O(n^2)
+									DCTUtils.encode(image.getBlock(U, i))//O(n^4)
 							, fq)
 					)
 			);
 			image.writeBlock(V, i,
-					ZigzagReaderWriter.write(
-							QuantificationUtils.quantCbCr(
-									DCTUtils.encode(image.getBlock(V, i))
+					ZigzagReaderWriter.write(//O(n^2)
+							QuantificationUtils.quantCbCr(//O(n^2)
+									DCTUtils.encode(image.getBlock(V, i))//O(n^4)
 							, fq)
 					)
 			);
 		}
+		//Storing DC's of each color space
 		Dpcm.dpcm(image.getColorSpace(Y), Y);
 		Dpcm.dpcm(image.getColorSpace(U), U);
 		Dpcm.dpcm(image.getColorSpace(V), V);
 		
+		//Writing binary's in the Entropy buffer
 		for (int i = 0; i < image.getBlockQuantity(); i++) {
 			for (int j = 0; j < 3; j++) {
 				Entropy.writeDC(Dpcm.getDC(j,i));
@@ -106,11 +115,17 @@ public class Main {
 				}
 			}
 		}
+		//Write the file
 		SZLReaderWriter.writeSZLFile(args[2], yCbCrImage.get_height(), yCbCrImage.get_width(), fq);
 	}
+	/**
+	 * Notation O(n^4)
+	 * @param args
+	 */
 	private static void decode(String[] args){
 		int[] header = SZLReaderWriter.readSZLFile(args[0]);
 		int blocQuanity = (header[1]/8)*(header[0]/8) * header[2];
+		//Creating an empty model
 		SZLImageModel image = new SZLImageModel(header[0],header[1]);
 		int[][] storedDc = new int[3][blocQuanity/3];
 		for (int i = 0; i < blocQuanity; i++) {
@@ -118,9 +133,10 @@ public class Main {
 			boolean val;
 			int blocIndex = (int)(Math.ceil(i/3));
 			LinkedList<int[]> runlengthValueList = new LinkedList<int[]>();
-			//Get Dc and store it
+			//Get DC and store it
 			storedDc[i % 3][blocIndex] = Entropy.readDC();
-			//Get Ac
+			//Get AC and write them in the model
+			//Read ac until the entropy class read a 0 : 0 couple
 			do {
 				ac = Entropy.readAC();
 				int[] runlengthValue = new int[2];
@@ -131,9 +147,10 @@ public class Main {
 			} while (!val);
 			image.writeBlock(i % 3, blocIndex, ACUtils.readAC(runlengthValueList));
 		}
+		// Apply every inverse algorithm to rebuild the image
 		for (int i = 0; i < 3; i++) {
 			Dpcm.dpcmInverse(storedDc[i], i);
-			for (int j = 0; j < 1024; j++) {
+			for (int j = 0; j < blocQuanity/3; j++) {
 				image.writePixel(i,j,0,0,Dpcm.getDC(i, j));
 				if(i == 0){
 					image.writeBlock(i, j, 
@@ -159,11 +176,13 @@ public class Main {
 				}	
 			}
 		}
+		//Redo a normal 2 Dimensonal array to convert it un RGB
 		int[][][] imageRecouper = image.recoupage();
 		YCbCrReaderWriter yCbCrCodec = new YCbCrReaderWriter();
 		YCbCrImageModel yCbCrImage = new YCbCrImageModel(header[0],header[1]);
 		yCbCrImage.set_image(imageRecouper);
 		yCbCrCodec.readYCbCr(yCbCrImage);
+		//Rewrite the uncompressed image
 		PPMReaderWriter.writePPMFile(args[1], yCbCrCodec.readYCbCr(yCbCrImage));
 	}
 }
