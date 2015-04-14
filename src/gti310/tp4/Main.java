@@ -1,4 +1,5 @@
 package gti310.tp4;
+import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -52,11 +53,15 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
 		if(args.length == 3){
-			System.out.println(args[2]);
-			encode(args);
+			if(validSourceFile(args[1])){
+				if(validQualityFactor(Integer.parseInt(args[0])))
+					encode(args);
+			}
+				
 		}
 		else if (args.length == 2){
-			decode(args);
+			if(validSourceFile(args[0]))
+				decode(args);
 		}
 		
 	}
@@ -72,6 +77,9 @@ public class Main {
 		YCbCrReaderWriter yCbCrCodec = new YCbCrReaderWriter();
 		int[][][] RGBImage = PPMReaderWriter.readPPMFile(args[1]); // testing
 		YCbCrImageModel yCbCrImage = yCbCrCodec.writeYCbCr(RGBImage);
+		if(!isValidImage(yCbCrImage.get_height(),yCbCrImage.get_width())){
+			return;
+		}
 		yCbCrCodec.readYCbCr(yCbCrImage);
 		
 		//Instanciacte our data model (check class to see the structure)
@@ -184,5 +192,33 @@ public class Main {
 		yCbCrCodec.readYCbCr(yCbCrImage);
 		//Rewrite the uncompressed image
 		PPMReaderWriter.writePPMFile(args[1], yCbCrCodec.readYCbCr(yCbCrImage));
+	}
+	private static boolean isValidImage(int height, int width){
+		if(height != width){
+			System.out.println("The image is not a square");
+			return false;
+		}
+		if(height % 8 != 0){
+			System.out.println("The image is not a factor of 8");
+			return false;
+		}
+		return true;
+	}
+	private static boolean validQualityFactor(int fq){
+		if(fq < 1 || fq >100){
+			System.out.println("The quality factor is not between 1 and 100");
+			return false;
+		}
+		else
+			return true;
+	}
+	private static boolean validSourceFile(String fileLocation){
+		File file = new File(fileLocation);
+		if(!file.exists()){
+			System.out.println("The file is not found");
+			return false;
+		}
+		else
+			return true;
 	}
 }
